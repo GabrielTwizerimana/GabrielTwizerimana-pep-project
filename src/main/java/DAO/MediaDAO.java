@@ -92,6 +92,23 @@ public class MediaDAO {
         }
         return messages;
     }
+    public Account GetAccountById(int id){
+        Connection conn=ConnectionUtil.getConnection();
+        try {
+            String sql="SELECT * FROM account WHERE account_id=?;";
+            PreparedStatement prep=conn.prepareStatement(sql);
+            prep.setInt(1, id);
+            ResultSet rs=prep.executeQuery();
+            while(rs.next()){
+            Account account=new Account(rs.getInt("account_id"),rs.getString("username"),rs.getString("password"));
+            return account;
+            }
+        } catch (Exception e) {
+           System.out.println(e.getMessage());
+
+        }
+        return null;
+    }
     public Message GetMessageById(int id){
         Connection conn=ConnectionUtil.getConnection();
         try {

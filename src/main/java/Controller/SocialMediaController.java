@@ -5,6 +5,7 @@ import java.security.Provider.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import DAO.MediaDAO;
 import Model.Account;
 import Model.Message;
 import Service.MediaService;
@@ -31,7 +32,8 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register",this::postAccountHandler);
-        app.post("/login",this::login);
+        app.post("/login",this::postLoginEmpty);
+        app.post("/login",this::postRegisterThenPostLogin);
         app.post("/messages",this::postMessageHandlerAdd);
         app.get("/messages/{message_id}",this::getMessageHandlerById);
         app.post("/messages/{message_id}",this::postMessageHandlerDelete);
@@ -59,16 +61,27 @@ public class SocialMediaController{
     }
 
     }
-    public void login(Context ctx)throws JsonProcessingException{
+    public void postLoginEmpty(Context ctx)throws JsonProcessingException{
     ObjectMapper mapper=new ObjectMapper();
     Account account=mapper.readValue(ctx.body(), Account.class);
-    Account logins=mediaservice.addAccount(account);
+    Account logins=mediaservice.getAllAccById(account);
     if(logins==null){
         ctx.status(401);
     }else{
         ctx.json(mapper.writeValueAsString(logins));
     }
     }
+    public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
+        ObjectMapper mapper=new ObjectMapper();
+        Account account=mapper.readValue(ctx.body(), Account.class);
+        Account postlogins=mediaservice.addAccount(account);
+        if(postlogins!=null){
+            ctx.status(200);
+        }else{
+            ctx.json(mapper.writeValueAsString(postlogins));
+        }
+        }
+
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);

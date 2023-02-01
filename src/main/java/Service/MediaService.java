@@ -33,6 +33,9 @@ public class MediaService {
     public Message getAllMsgById(Message message){
       return mediadao.GetMessageById(message.getMessage_id());
     }
+    public Account getAllAccById(Account account){
+      return mediadao.GetAccountById(account.getAccount_id());
+    }
     
     public Message deleleMsg(int message_id, Message message){
    return mediadao.deleteMessage(message_id);
