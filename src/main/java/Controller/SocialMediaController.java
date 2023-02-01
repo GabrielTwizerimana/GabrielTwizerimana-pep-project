@@ -1,6 +1,7 @@
 package Controller;
 
 import java.security.Provider.Service;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,11 +34,10 @@ public class SocialMediaController{
         Javalin app = Javalin.create();
         app.post("/register",this::postAccountHandler);
         app.post("/login",this::postLoginEmpty);
-        app.post("/login",this::postRegisterThenPostLogin);
         app.post("/messages",this::postMessageHandlerAdd);
-        app.get("/messages/{message_id}",this::getMessageHandlerById);
+        app.get("/messages",this::getMessageHandlerById);
         app.post("/messages/{message_id}",this::postMessageHandlerDelete);
-       
+        
         return app;
     }
    
@@ -69,6 +69,7 @@ public class SocialMediaController{
         ctx.status(401);
     }else{
         ctx.json(mapper.writeValueAsString(logins));
+        
     }
     }
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
@@ -95,7 +96,7 @@ public class SocialMediaController{
     private void postMessageHandlerDelete(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);
-        Message deletedMessage=mediaservice.deleleMsg(0, message);
+        Message deletedMessage=mediaservice.deleleMsg(message);
         if(deletedMessage==null){
             context.status(200);
         }else{
@@ -106,10 +107,14 @@ public class SocialMediaController{
         Message message=mapper.readValue(context.body(),Message.class);
         Message messagebyid=mediaservice.getAllMsgById(message);
         if(messagebyid==null){
+
             context.status(200);
-        }else{
+        }
+        else{
         context.json(mapper.writeValueAsString(messagebyid));
+    }}
+  
     }
-}
     
-    }
+    
+    

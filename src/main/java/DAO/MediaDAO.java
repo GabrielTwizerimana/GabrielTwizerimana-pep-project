@@ -127,7 +127,7 @@ public class MediaDAO {
         }
         return null;
     }
-    public Message deleteMessage(int message_id){
+    public Message deleteMessage(int message_id,Message message){
         Connection conn=ConnectionUtil.getConnection();
     try {
         String sql="DELETE FROM message WHERE message_id=?;";

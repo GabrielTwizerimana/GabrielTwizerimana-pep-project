@@ -37,8 +37,8 @@ public class MediaService {
       return mediadao.GetAccountById(account.getAccount_id());
     }
     
-    public Message deleleMsg(int message_id, Message message){
-   return mediadao.deleteMessage(message_id);
+    public Message deleleMsg(int msgid,Message message){
+   return mediadao.deleteMessage(message.getMessage_id());
     }
    
 }
