@@ -33,10 +33,13 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register",this::postAccountHandler);
+        app.get("/login",this::postAccountHandler);
+        //app.post("/login",this::postRegisterThenPostLoginTest);
         app.post("/login",this::postLoginEmpty);
         app.post("/messages",this::postMessageHandlerAdd);
         app.get("/messages",this::getMessageHandlerById);
-        app.post("/messages/{message_id}",this::postMessageHandlerDelete);
+        app.get("/messages",this::getAllMessageHandler);
+        
         
         return app;
     }
@@ -57,6 +60,22 @@ public class SocialMediaController{
         }
       
         else{
+            
+        context.json(mapper.writeValueAsString(addedAccount));
+    }
+
+    }
+    private void postRegisterThenPostLoginTest(Context context) throws JsonProcessingException{
+        ObjectMapper mapper=new ObjectMapper();
+        Account account=mapper.readValue(context.body(),Account.class);
+        Account addedAccount=mediaservice.addAccount(account);
+        if(addedAccount.username.isEmpty() || addedAccount.equals(account)|| addedAccount.password.length()<4){
+          
+            context.status(200);
+            
+        }
+      
+        else{
         context.json(mapper.writeValueAsString(addedAccount));
     }
 
@@ -65,13 +84,20 @@ public class SocialMediaController{
     ObjectMapper mapper=new ObjectMapper();
     Account account=mapper.readValue(ctx.body(), Account.class);
     Account logins=mediaservice.getAllAccById(account);
+    Account logins1=mediaservice.addAccount(account);
     if(logins==null){
         ctx.status(401);
+    }
+    else if(logins1.username==account.username && logins1.password==account.password){
+    ctx.status(200);
     }else{
+        
         ctx.json(mapper.writeValueAsString(logins));
+        ctx.json(mapper.writeValueAsString(logins1));
         
     }
     }
+    
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(ctx.body(), Account.class);
@@ -93,15 +119,7 @@ public class SocialMediaController{
         context.json(mapper.writeValueAsString(addedMessage));
         }
     }
-    private void postMessageHandlerDelete(Context context) throws JsonProcessingException{
-        ObjectMapper mapper=new ObjectMapper();
-        Message message=mapper.readValue(context.body(),Message.class);
-        Message deletedMessage=mediaservice.deleleMsg(message);
-        if(deletedMessage==null){
-            context.status(200);
-        }else{
-        context.json(mapper.writeValueAsString(deletedMessage));
-    }}
+    
     private void getMessageHandlerById(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);
@@ -113,8 +131,11 @@ public class SocialMediaController{
         else{
         context.json(mapper.writeValueAsString(messagebyid));
     }}
-  
-    }
+    private void getAllMessageHandler(Context context) {
+        List<Message> message=mediaservice.getAllMsg();
+        context.json(message);
+    }}
+    
     
     
     

@@ -27,7 +27,7 @@
 [INFO] Running AuthIntegrationTest
 Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_E ON PUBLIC.ACCOUNT(USERNAME NULLS FIRST) VALUES ( /* 1 */ 'user' )"; SQL statement:
 INSERT INTO account (username,password) VALUES (?,?) [23505-214]
-[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 9.568 s <<< FAILURE! - in AuthIntegrationTest
+[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 9.143 s <<< FAILURE! - in AuthIntegrationTest
 [ERROR] AuthIntegrationTest.postRegisterThenPostLoginTest  Time elapsed: 1.038 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<401>
 	at org.junit.Assert.fail(Assert.java:89)
@@ -108,8 +108,8 @@ Column "POSTED_ID" not found; SQL statement:
 INSERT INTO message (posted_id,message_text,time_posted_epoch) VALUES (?,?,?); [42122-214]
 Column "POSTED_ID" not found; SQL statement:
 INSERT INTO message (posted_id,message_text,time_posted_epoch) VALUES (?,?,?); [42122-214]
-[ERROR] Tests run: 20, Failures: 19, Errors: 0, Skipped: 0, Time elapsed: 20.548 s <<< FAILURE! - in MessagingIntegrationTest
-[ERROR] MessagingIntegrationTest.postAccountAndMessageThenGetMessageTest  Time elapsed: 1.016 s  <<< FAILURE!
+[ERROR] Tests run: 20, Failures: 19, Errors: 0, Skipped: 0, Time elapsed: 20.598 s <<< FAILURE! - in MessagingIntegrationTest
+[ERROR] MessagingIntegrationTest.postAccountAndMessageThenGetMessageTest  Time elapsed: 1.019 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -159,7 +159,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.deleteMessageNonExistentMessageTest  Time elapsed: 1.026 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.deleteMessageNonExistentMessageTest  Time elapsed: 1.025 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<404>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -208,7 +208,7 @@ java.lang.AssertionError: expected:<200> but was:<404>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postAccountAndBlankMessage  Time elapsed: 1.037 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postAccountAndBlankMessage  Time elapsed: 1.035 s  <<< FAILURE!
 java.lang.AssertionError: expected:<400> but was:<200>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -257,7 +257,7 @@ java.lang.AssertionError: expected:<400> but was:<200>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.039 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.034 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -307,7 +307,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postManyUsersAndMessagesThenGetAllMessages  Time elapsed: 1.031 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postManyUsersAndMessagesThenGetAllMessages  Time elapsed: 1.032 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -459,7 +459,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postMessageNonExistentAccountTest  Time elapsed: 1.022 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postMessageNonExistentAccountTest  Time elapsed: 1.026 s  <<< FAILURE!
 java.lang.AssertionError: expected:<400> but was:<200>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -508,7 +508,7 @@ java.lang.AssertionError: expected:<400> but was:<200>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.032 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.036 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -559,7 +559,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postAccountAndTooLongMessage  Time elapsed: 1.032 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postAccountAndTooLongMessage  Time elapsed: 1.057 s  <<< FAILURE!
 java.lang.AssertionError: expected:<400> but was:<200>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -608,7 +608,7 @@ java.lang.AssertionError: expected:<400> but was:<200>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.patchMessageTooLongTest  Time elapsed: 1.029 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.patchMessageTooLongTest  Time elapsed: 1.034 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -658,7 +658,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.getMessagesByAccountIdEmpty  Time elapsed: 1.021 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.getMessagesByAccountIdEmpty  Time elapsed: 1.025 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<404>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -707,7 +707,7 @@ java.lang.AssertionError: expected:<200> but was:<404>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.033 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.034 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -758,7 +758,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.patchMessageBlankTest  Time elapsed: 1.024 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.patchMessageBlankTest  Time elapsed: 1.027 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -808,7 +808,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.patchMessageNonExistentMessageTest  Time elapsed: 1.018 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.patchMessageNonExistentMessageTest  Time elapsed: 1.019 s  <<< FAILURE!
 java.lang.AssertionError: expected:<400> but was:<404>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -857,7 +857,7 @@ java.lang.AssertionError: expected:<400> but was:<404>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postManyAccountsAndMessagesTest  Time elapsed: 1.03 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postManyAccountsAndMessagesTest  Time elapsed: 1.032 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -907,7 +907,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.getAllMessagesEmptyTest  Time elapsed: 1.02 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.getAllMessagesEmptyTest  Time elapsed: 1.022 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<500>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -956,7 +956,7 @@ java.lang.AssertionError: expected:<200> but was:<500>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postAccountAndMessageTest  Time elapsed: 1.026 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postAccountAndMessageTest  Time elapsed: 1.029 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -1005,7 +1005,7 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postAccountAndMessageAndGetAllMessagesTest  Time elapsed: 1.029 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postAccountAndMessageAndGetAllMessagesTest  Time elapsed: 1.026 s  <<< FAILURE!
 java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}> but was:<Message{message_id=0, posted_by=1, message_text='hello message', time_posted_epoch=1669947792}>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -1085,8 +1085,8 @@ java.lang.AssertionError: expected:<Message{message_id=1, posted_by=1, message_t
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  37.919 s
-[INFO] Finished at: 2023-02-01T18:11:21Z
+[INFO] Total time:  33.624 s
+[INFO] Finished at: 2023-02-01T20:40:39Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M7:test (default-test) on project Challenges: There are test failures.
 [ERROR] 
