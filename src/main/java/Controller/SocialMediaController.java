@@ -37,8 +37,9 @@ public class SocialMediaController{
         //app.post("/login",this::postRegisterThenPostLoginTest);
         app.post("/login",this::postLoginEmpty);
         app.post("/messages",this::postMessageHandlerAdd);
-        app.get("/messages",this::getMessageHandlerById);
+        //app.get("/messages",this::getMessageHandlerById);
         app.get("/messages",this::getAllMessageHandler);
+        app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
         
         
         return app;
@@ -134,7 +135,15 @@ public class SocialMediaController{
     private void getAllMessageHandler(Context context) {
         List<Message> message=mediaservice.getAllMsg();
         context.json(message);
-    }}
+    }
+    private void getMessagesByAccountIdEmpty(Context context) {
+        List<Message> message=mediaservice.getAllMsg();
+        List<Account> account=mediaservice.getAllAcc();
+        if(account==null || message==null)
+        context.json(message);
+        context.json(account);
+    }
+}
     
     
     
