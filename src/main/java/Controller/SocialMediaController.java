@@ -33,10 +33,10 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register",this::postAccountHandler);
-        app.post("/login",this::postLoginEmpty);
+        app.post("/login",this::postRegisterThenPostLogin);
         app.post("/messages",this::postMessageHandlerAdd);
         app.post("/messages/1",this::getAllMessageHandler);
-        app.get("/messages/1",this::getMessagePostedHandler);
+        app.delete("/messages/1",this::postDeletedMessagesHandler);
         app.get("/messages",this::getAllMessageHandler);
         app.get("/accounts/messages",this::getAllAccountHandler);
         app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
@@ -68,24 +68,27 @@ public class SocialMediaController{
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(ctx.body(), Account.class);
-        Account postlogins=mediaservice.addAccount(account);
-        if(postlogins.getUsername()!=null && postlogins.getPassword()!=null){
-            ctx.status(200);
-        }else{
+        Account postlogins=mediaservice.loginPass(account);
+        if(postlogins!=null){
             ctx.json(mapper.writeValueAsString(postlogins));
-        }
-        }
-    private void deletedMessage(Context context) throws JsonProcessingException{
-        ObjectMapper mapper=new ObjectMapper();
-        Message message=mapper.readValue(context.body(),Message.class);
-        Message deletedAccount=mediaservice.deleleMsg(0, message);
-        if(deletedAccount!=null){
-            context.status(200);
         }else{
-        context.json(mapper.writeValueAsString(deletedAccount));
-    }
-    }
-    public void postLoginEmpty(Context ctx)throws JsonProcessingException{
+            ctx.status(401);
+        }
+        }
+        private void updateAccountHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+       int account_id = Integer.parseInt(ctx.pathParam("account_id"));
+        Account updatedAccount = mediaservice.getAllUpdatedAccount(account, account_id);
+         System.out.println(updatedAccount);
+        if(updatedAccount == null){
+        ctx.status(400);
+         }else{
+            ctx.json(mapper.writeValueAsString(updatedAccount));
+            }
+            }
+            
+    /*  public void postLoginEmpty(Context ctx)throws JsonProcessingException{
     ObjectMapper mapper=new ObjectMapper();
     Account account=mapper.readValue(ctx.body(), Account.class);
     Account logins=mediaservice.getAllAccById(account);
@@ -97,8 +100,21 @@ public class SocialMediaController{
     ctx.json(mapper.writeValueAsString(logins));
     
     }
-}
-   
+}*/
+public void postDeletedMessagesHandler(Context ctx)throws JsonProcessingException{
+    ObjectMapper mapper=new ObjectMapper();
+    Message message=mapper.readValue(ctx.body(), Message.class);
+    int message_id=Integer.parseInt(ctx.pathParam("message_id"));
+    Message DeletedMsg_id=mediaservice.deleleMsg(message_id,message);
+
+    if(DeletedMsg_id==null){
+        ctx.status(200);
+    }
+   else{ 
+    ctx.json(mapper.writeValueAsString(DeletedMsg_id));
+    
+    
+    }}
 
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
@@ -137,11 +153,7 @@ public class SocialMediaController{
         context.json(message);
         context.json(account);
     }
-    private void getMessagePostedHandler(Context context) {
-        List<Message> messagesposted=mediaservice.getAllMsgByMsgText(null);
-        context.json(messagesposted);
-        
-    }
+ 
 }
     
     

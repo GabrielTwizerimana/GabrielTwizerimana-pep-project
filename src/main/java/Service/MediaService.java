@@ -30,21 +30,28 @@ public class MediaService {
     public List<Message> getAllMsg(){
       return mediadao.GetAllMessages();
     }
+    public Account loginPass(Account account){
+      return mediadao.login(account);
+    }
     public Message getAllMsgById(Message message){
       return mediadao.GetMessageById(message.getMessage_id());
     }
-    public Message getAllMsgByMsgText(Message message){
-      if(mediadao.GetMessageByMsgposted(message.getMessage_text()==null)){
-       return mediadao.NewMessage(message);
+    public Account getAllUpdatedAccount(Account account, int account_id){
+      if(mediadao.GetAccountById(account_id)!=null){
+        return mediadao.GetAccountById(account_id);
       }
-      return null;
+       
+       return null;
     }
     public Account getAllAccById(Account account){
       return mediadao.GetAccountById(account.getAccount_id());
     }
     
-    public Message deleleMsg(int msgid,Message message){
-   return mediadao.deleteMessage(msgid);
+    public Message deleleMsg(int message_id,Message message){
+      if(mediadao.GetMessageById(message_id)!=null){
+      return mediadao.GetMessageById(message_id);
+      }
+      return null;
     }
-   
-}
+
+  }

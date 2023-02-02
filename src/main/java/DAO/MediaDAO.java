@@ -35,6 +35,26 @@ public class MediaDAO {
         }
         return account;
     }
+    Connection conn=ConnectionUtil.getConnection();
+    public Account updateAccount(Account account, int id){
+        try {
+            String sql="update account set user=?,password=? where account_id=?;";
+            PreparedStatement prep=conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            prep.setString(1, account.getUsername());
+            prep.setString(2, account.getPassword());
+            prep.setInt(3,id);
+            prep.executeUpdate();
+            ResultSet pkResultSet=prep.getGeneratedKeys();
+            while(pkResultSet.next()){
+              
+                int generatedAcc_id=(int) pkResultSet.getLong(1);
+                return new Account(generatedAcc_id,account.getUsername(),account.getPassword());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return account;
+    }
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
         try {
@@ -145,7 +165,7 @@ public class MediaDAO {
         }
         return null;
     }
-    public Message deleteMessage(int message_id){
+    public Message deleteMessage(int message_id, Message message){
         Connection conn=ConnectionUtil.getConnection();
     try {
         String sql="DELETE FROM message WHERE message_id=?;";
@@ -156,4 +176,24 @@ public class MediaDAO {
         System.out.println(e.getMessage());
     }
     return null;
-}}
+}
+public Account login(Account account){
+    Connection conn=ConnectionUtil.getConnection();
+try {
+    String sql="SELECT * FROM account WHERE username=?,password=?;";
+    PreparedStatement prep=conn.prepareStatement(sql);
+    prep.setString(1,account.getUsername() );
+    prep.setString(2,account.getPassword());
+    //prep.executeQuery();
+    ResultSet rs=prep.executeQuery();
+    while(rs.next()){
+        Account accounts=new Account(rs.getInt("account_id"),rs.getString("username"),
+       rs.getString("password"));
+        return accounts;
+        }
+} catch (Exception e) {
+    System.out.println(e.getMessage());
+}
+return null;
+}
+}
