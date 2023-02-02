@@ -33,12 +33,12 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register",this::postAccountHandler);
-        app.get("/login",this::postAccountHandler);
-        //app.post("/login",this::postRegisterThenPostLoginTest);
         app.post("/login",this::postLoginEmpty);
         app.post("/messages",this::postMessageHandlerAdd);
-        //app.get("/messages",this::getMessageHandlerById);
+        app.post("/messages/1",this::getAllMessageHandler);
+        app.get("/messages/1",this::getMessagePostedHandler);
         app.get("/messages",this::getAllMessageHandler);
+        app.get("/accounts/messages",this::getAllAccountHandler);
         app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
         
         
@@ -54,10 +54,9 @@ public class SocialMediaController{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(context.body(),Account.class);
         Account addedAccount=mediaservice.addAccount(account);
-        if(addedAccount.username.isEmpty() || addedAccount.equals(account)|| addedAccount.password.length()<4){
-          
-            context.status(400);
-            
+        if(addedAccount.username.isEmpty() || addedAccount.equals(account) ||
+         addedAccount.username.isBlank()|| addedAccount.password.length()<4 ){
+            context.status(400);   
         }
       
         else{
@@ -66,75 +65,70 @@ public class SocialMediaController{
     }
 
     }
-    private void postRegisterThenPostLoginTest(Context context) throws JsonProcessingException{
-        ObjectMapper mapper=new ObjectMapper();
-        Account account=mapper.readValue(context.body(),Account.class);
-        Account addedAccount=mediaservice.addAccount(account);
-        if(addedAccount.username.isEmpty() || addedAccount.equals(account)|| addedAccount.password.length()<4){
-          
-            context.status(200);
-            
-        }
-      
-        else{
-        context.json(mapper.writeValueAsString(addedAccount));
-    }
-
-    }
-    public void postLoginEmpty(Context ctx)throws JsonProcessingException{
-    ObjectMapper mapper=new ObjectMapper();
-    Account account=mapper.readValue(ctx.body(), Account.class);
-    Account logins=mediaservice.getAllAccById(account);
-    Account logins1=mediaservice.addAccount(account);
-    if(logins==null){
-        ctx.status(401);
-    }
-    else if(logins1.username==account.username && logins1.password==account.password){
-    ctx.status(200);
-    }else{
-        
-        ctx.json(mapper.writeValueAsString(logins));
-        ctx.json(mapper.writeValueAsString(logins1));
-        
-    }
-    }
-    
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(ctx.body(), Account.class);
         Account postlogins=mediaservice.addAccount(account);
-        if(postlogins!=null){
+        if(postlogins.getUsername()!=null && postlogins.getPassword()!=null){
             ctx.status(200);
         }else{
             ctx.json(mapper.writeValueAsString(postlogins));
         }
         }
+    private void deletedMessage(Context context) throws JsonProcessingException{
+        ObjectMapper mapper=new ObjectMapper();
+        Message message=mapper.readValue(context.body(),Message.class);
+        Message deletedAccount=mediaservice.deleleMsg(0, message);
+        if(deletedAccount!=null){
+            context.status(200);
+        }else{
+        context.json(mapper.writeValueAsString(deletedAccount));
+    }
+    }
+    public void postLoginEmpty(Context ctx)throws JsonProcessingException{
+    ObjectMapper mapper=new ObjectMapper();
+    Account account=mapper.readValue(ctx.body(), Account.class);
+    Account logins=mediaservice.getAllAccById(account);
+
+    if(logins==null){
+        ctx.status(401);
+    }
+   else{ 
+    ctx.json(mapper.writeValueAsString(logins));
+    
+    }
+}
+   
 
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);
         Message addedMessage=mediaservice.addMessage(message);
-        if(addedMessage==null){
+        if(addedMessage==null || addedMessage.posted_by==0 ||addedMessage.message_text.length()>255 ||
+         addedMessage.message_text.isBlank() || addedMessage.message_id==0){
             context.status(400);
-        }else{
+        }
+        else{
         context.json(mapper.writeValueAsString(addedMessage));
         }
     }
     
-    private void getMessageHandlerById(Context context) throws JsonProcessingException{
-        ObjectMapper mapper=new ObjectMapper();
-        Message message=mapper.readValue(context.body(),Message.class);
-        Message messagebyid=mediaservice.getAllMsgById(message);
-        if(messagebyid==null){
-
-            context.status(200);
-        }
-        else{
-        context.json(mapper.writeValueAsString(messagebyid));
-    }}
+   
     private void getAllMessageHandler(Context context) {
         List<Message> message=mediaservice.getAllMsg();
         context.json(message);
+    }
+   
+    private void getAllAccountHandler(Context context) {
+        List<Account> account=mediaservice.getAllAcc();
+        List<Message> message=mediaservice.getAllMsg();
+        if(account!=null && message!=null){
+            context.json(message);
+            context.json(account);
+        }else{
+        context.status(400);
+        }
+        
     }
     private void getMessagesByAccountIdEmpty(Context context) {
         List<Message> message=mediaservice.getAllMsg();
@@ -142,6 +136,11 @@ public class SocialMediaController{
         if(account==null || message==null)
         context.json(message);
         context.json(account);
+    }
+    private void getMessagePostedHandler(Context context) {
+        List<Message> messagesposted=mediaservice.getAllMsgByMsgText(null);
+        context.json(messagesposted);
+        
     }
 }
     

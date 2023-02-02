@@ -38,7 +38,7 @@ public class MediaDAO {
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
         try {
-            String sql="INSERT INTO message (posted_id,message_text,time_posted_epoch) VALUES (?,?,?);";
+            String sql="INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?);";
             PreparedStatement prep=conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             prep.setInt(1, message.getPosted_by());
             prep.setString(2, message.getMessage_text());
@@ -83,7 +83,7 @@ public class MediaDAO {
             prep.executeQuery();
             ResultSet rs=prep.executeQuery();
            while(rs.next()){
-           Message message=new Message(rs.getInt("posted_id"),rs.getString("message_text"),
+           Message message=new Message(rs.getInt("posted_by"),rs.getString("message_text"),
            rs.getLong("time_posted_epoch"));
            messages.add(message);
            }
@@ -127,7 +127,25 @@ public class MediaDAO {
         }
         return null;
     }
-    public Message deleteMessage(int message_id,Message message){
+    public Message GetMessageByMsgposted(String message_text){
+        Connection conn=ConnectionUtil.getConnection();
+        try {
+            String sql="SELECT * FROM message WHERE message_text=?;";
+            PreparedStatement prep=conn.prepareStatement(sql);
+            prep.setString(1, message_text);
+            ResultSet rs=prep.executeQuery();
+            while(rs.next()){
+            Message message=new Message(rs.getInt("message_id"),
+            rs.getInt("posted_by"),rs.getString("message_text"),rs.getLong("time_posted_epoch"));
+            return message;
+            }
+        } catch (Exception e) {
+           System.out.println(e.getMessage());
+
+        }
+        return null;
+    }
+    public Message deleteMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
     try {
         String sql="DELETE FROM message WHERE message_id=?;";

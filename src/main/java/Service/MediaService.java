@@ -33,12 +33,18 @@ public class MediaService {
     public Message getAllMsgById(Message message){
       return mediadao.GetMessageById(message.getMessage_id());
     }
+    public Message getAllMsgByMsgText(Message message){
+      if(mediadao.GetMessageByMsgposted(message.getMessage_text()==null)){
+       return mediadao.NewMessage(message);
+      }
+      return null;
+    }
     public Account getAllAccById(Account account){
       return mediadao.GetAccountById(account.getAccount_id());
     }
     
     public Message deleleMsg(int msgid,Message message){
-   return mediadao.deleteMessage(message.getMessage_id());
+   return mediadao.deleteMessage(msgid);
     }
    
 }
