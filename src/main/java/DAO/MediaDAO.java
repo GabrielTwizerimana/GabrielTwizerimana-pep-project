@@ -35,25 +35,42 @@ public class MediaDAO {
         }
         return account;
     }
-    Connection conn=ConnectionUtil.getConnection();
-    public Account updateAccount(Account account, int id){
+    
+    public Message updateMessage(){
+        Connection conn=ConnectionUtil.getConnection();
         try {
-            String sql="update account set user=?,password=? where account_id=?;";
+            String sql="update message set message_text=? where message_id=?;";
             PreparedStatement prep=conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            prep.setString(1, account.getUsername());
-            prep.setString(2, account.getPassword());
-            prep.setInt(3,id);
+            prep.setInt(1,message.posted_by);
+            prep.setString(2,message.message_text);
+            prep.setLong(3,message.time_posted_epoch);
+            prep.setInt(4,message.message_id);
             prep.executeUpdate();
             ResultSet pkResultSet=prep.getGeneratedKeys();
             while(pkResultSet.next()){
               
-                int generatedAcc_id=(int) pkResultSet.getLong(1);
-                return new Account(generatedAcc_id,account.getUsername(),account.getPassword());
+                int generatedAcc_id=(int) pkResultSet.getInt(1);
+                return new Message(generatedAcc_id,message.getPosted_by(),message.getMessage_text(),message.getTime_posted_epoch());
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return account;
+        return message;
+    }
+    public Message patchingMessage(Message message, int id){
+        Connection conn=ConnectionUtil.getConnection();
+        try {
+            String sql="update message set message_text=? where message_id=?;";
+            PreparedStatement prep=conn.prepareStatement(sql);
+           // prep.setInt(1,message.posted_by);
+            prep.setString(1,message.message_text);
+            //prep.setLong(2,message.time_posted_epoch);
+            prep.setInt(2,id);
+            prep.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return message;
     }
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
@@ -106,6 +123,25 @@ public class MediaDAO {
            Message message=new Message(rs.getInt("posted_by"),rs.getString("message_text"),
            rs.getLong("time_posted_epoch"));
            messages.add(message);
+           }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return messages;
+    }
+    public List<Message> postManyAccountsAndMessagesThenGetMessagesByAccountIdDAO(){
+        Connection conn=ConnectionUtil.getConnection();
+        List<Message> messages=new ArrayList<>();
+        try {
+            String sql="select * from message where posted_by=?;";
+            PreparedStatement prep=conn.prepareStatement(sql);
+            prep.setInt(1,message.getPosted_by() );
+            prep.executeQuery();
+            ResultSet rs=prep.executeQuery();
+           while(rs.next()){
+           Message messagepost=new Message(rs.getInt("posted_by"),rs.getString("message_text"),
+           rs.getLong("time_posted_epoch"));
+           messages.add(messagepost);
            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -168,7 +204,7 @@ public class MediaDAO {
     public Message deleteMessage(int message_id, Message message){
         Connection conn=ConnectionUtil.getConnection();
     try {
-        String sql="DELETE FROM message WHERE message_id=?;";
+        String sql="DELETE * FROM message WHERE message_id=?;";
         PreparedStatement prep=conn.prepareStatement(sql);
         prep.setInt(1, message_id);
         prep.executeUpdate();
@@ -177,10 +213,22 @@ public class MediaDAO {
     }
     return null;
 }
+public Message deleteMessageNonExistentMessage(int message_id, Message message){
+    Connection conn=ConnectionUtil.getConnection();
+try {
+    String sql="DELETE message_text=? FROM message WHERE message_id=?;";
+    PreparedStatement prep=conn.prepareStatement(sql);
+    prep.setInt(1, message_id);
+    prep.executeUpdate();
+} catch (Exception e) {
+    System.out.println(e.getMessage());
+}
+return null;
+}
 public Account login(Account account){
     Connection conn=ConnectionUtil.getConnection();
 try {
-    String sql="SELECT * FROM account WHERE username=?,password=?;";
+    String sql="select *from account WHERE username=?,password=?;";
     PreparedStatement prep=conn.prepareStatement(sql);
     prep.setString(1,account.getUsername() );
     prep.setString(2,account.getPassword());
