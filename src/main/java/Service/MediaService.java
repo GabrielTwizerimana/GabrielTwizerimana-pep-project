@@ -42,9 +42,12 @@ public class MediaService {
       return mediadao.postManyAccountsAndMessagesThenGetMessagesByAccountIdDAO();
     }
   
-    public Account loginPass(Account account){
-      
-      return mediadao.login(account);
+    public Account loginPass(Account account,String username){
+      account=null;
+      if(account==null && !account.getPassword().equalsIgnoreCase("password")){
+        return null;
+      }
+    return mediadao.login(account, username);
       
     }
     public Message getAllMsgById(Message message){

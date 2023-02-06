@@ -80,7 +80,7 @@ public class SocialMediaController{
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(ctx.body(), Account.class);
-        Account postlogins=mediaservice.loginPass(account);
+        Account postlogins=mediaservice.loginPass(account, null);
         if(postlogins==null){
             ctx.status(401); 
         }else{

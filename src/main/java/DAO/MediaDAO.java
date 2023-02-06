@@ -225,10 +225,11 @@ try {
 }
 return null;
 }
-public Account login(Account account){
+public Account login(Account account, String username){
+   // account=null;
     Connection conn=ConnectionUtil.getConnection();
 try {
-    String sql="select *from account WHERE username=?,password=?;";
+    String sql="select username,password from account WHERE username="+username+"";
     PreparedStatement prep=conn.prepareStatement(sql);
     prep.setString(1,account.getUsername() );
     prep.setString(2,account.getPassword());
@@ -239,6 +240,7 @@ try {
        rs.getString("password"));
         return accounts;
         }
+       
 } catch (Exception e) {
     System.out.println(e.getMessage());
 }
