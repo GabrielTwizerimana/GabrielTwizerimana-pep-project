@@ -37,16 +37,17 @@ public class SocialMediaController{
         app.post("/login",this::postRegisterThenPostLogin);
         app.post("/messages",this::postMessageHandlerAdd);
         app.get("/messages",this::getAllMessageHandler);
-        app.delete("/messages/{message_id}",this::postDeletedMessagesHandler);
-        app.post("/accounts/messages",this::getAllAccountHandler);
-        app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
+        app.get("/messages/1",this::getAllMessageHandler);
+        //app.delete("/messages/{message_id}",this::postDeletedMessagesHandler);
+        //app.post("/accounts/messages",this::getAllAccountHandler);
+        //app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
        // app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
-        app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
-        app.patch("/messages", this::updateMessageHandler);
-        app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
-        app.get("/messages/{message_id}", this::GetAllMessageById);
-        app.delete("/messeges/1", this::messageDeleteNonExistance1);
-        app.get("accounts/{account_id}/messages",this::AllMessagesByPosted_by);
+        //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
+        //app.patch("/messages", this::updateMessageHandler);
+        //app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
+        //app.get("/messages/{message_id}", this::GetAllMessageById);
+        //app.delete("/messeges/1", this::messageDeleteNonExistance1);
+        //app.get("accounts/{account_id}/messages",this::AllMessagesByPosted_by);
 
         
         
@@ -150,10 +151,11 @@ public void postDeletedMessagesHandler(Context context)throws JsonProcessingExce
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);
         Message addedMessage=mediaservice.addMessage(message);
-        if(addedMessage==null || addedMessage.posted_by==0 ||addedMessage.message_text.length()>255 ||
-         addedMessage.message_text.isBlank() || addedMessage.message_id==0){
+        if(addedMessage.posted_by==0 ||addedMessage.message_text.length()>255
+         || addedMessage.message_text.isBlank() || addedMessage.message_id==0 ){
             context.status(400);
-        }
+         }
+         
         else{
         context.json(mapper.writeValueAsString(addedMessage));
         }

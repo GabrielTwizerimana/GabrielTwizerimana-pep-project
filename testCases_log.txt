@@ -9,7 +9,9 @@
 [INFO] Copying 1 resource
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ Challenges ---
-[INFO] Nothing to compile - all classes are up to date
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 8 source files to /workspace/GabrielTwizerimana-pep-project/target/classes
 [INFO] 
 [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Challenges ---
 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
@@ -25,22 +27,16 @@
 [INFO]  T E S T S
 [INFO] -------------------------------------------------------
 [INFO] Running AuthIntegrationTest
-Syntax error in SQL statement "select *from account WHERE username=?[*],password=?;"; SQL statement:
-select *from account WHERE username=?,password=?; [42000-214]
-Syntax error in SQL statement "select *from account WHERE username=?[*],password=?;"; SQL statement:
-select *from account WHERE username=?,password=?; [42000-214]
 Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_E ON PUBLIC.ACCOUNT(USERNAME NULLS FIRST) VALUES ( /* 1 */ 'user' )"; SQL statement:
 INSERT INTO account (username,password) VALUES (?,?) [23505-214]
-Syntax error in SQL statement "select *from account WHERE username=?[*],password=?;"; SQL statement:
-select *from account WHERE username=?,password=?; [42000-214]
-[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 8.475 s <<< FAILURE! - in AuthIntegrationTest
-[ERROR] AuthIntegrationTest.postRegisterThenPostLoginTest  Time elapsed: 1.039 s  <<< FAILURE!
-java.lang.AssertionError: expected:<200> but was:<401>
+[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 8.41 s <<< FAILURE! - in AuthIntegrationTest
+[ERROR] AuthIntegrationTest.postRegisterThenPostIncorrectLoginTest  Time elapsed: 2.219 s  <<< FAILURE!
+java.lang.AssertionError: expected:<401> but was:<200>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
 	at org.junit.Assert.assertEquals(Assert.java:647)
 	at org.junit.Assert.assertEquals(Assert.java:633)
-	at AuthIntegrationTest.postRegisterThenPostLoginTest(AuthIntegrationTest.java:182)
+	at AuthIntegrationTest.postRegisterThenPostIncorrectLoginTest(AuthIntegrationTest.java:207)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -90,10 +86,16 @@ Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREI
 INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
 Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREIGN KEY(POSTED_BY) REFERENCES PUBLIC.ACCOUNT(ACCOUNT_ID) (0)"; SQL statement:
 INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
+Value too long for column "MESSAGE_TEXT CHARACTER VARYING(255)": "'Over 255 characters                 Over 255 characters Over 255 characters Ove... (383)"; SQL statement:
+INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [22001-214]
+Value too long for column "MESSAGE_TEXT CHARACTER VARYING(255)": "'Over 255 characters                 Over 255 characters Over 255 characters Ove... (383)"; SQL statement:
+INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [22001-214]
 Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREIGN KEY(POSTED_BY) REFERENCES PUBLIC.ACCOUNT(ACCOUNT_ID) (0)"; SQL statement:
 INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
-[ERROR] Tests run: 20, Failures: 8, Errors: 1, Skipped: 0, Time elapsed: 20.636 s <<< FAILURE! - in MessagingIntegrationTest
-[ERROR] MessagingIntegrationTest.postAccountAndMessageThenGetMessageTest  Time elapsed: 1.021 s  <<< FAILURE!
+Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREIGN KEY(POSTED_BY) REFERENCES PUBLIC.ACCOUNT(ACCOUNT_ID) (0)"; SQL statement:
+INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
+[ERROR] Tests run: 20, Failures: 8, Errors: 1, Skipped: 0, Time elapsed: 20.601 s <<< FAILURE! - in MessagingIntegrationTest
+[ERROR] MessagingIntegrationTest.postAccountAndMessageThenGetMessageTest  Time elapsed: 1.022 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<500>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -142,7 +144,7 @@ java.lang.AssertionError: expected:<200> but was:<500>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.deleteMessageNonExistentMessageTest  Time elapsed: 1.023 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.deleteMessageNonExistentMessageTest  Time elapsed: 1.027 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<500>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -191,7 +193,7 @@ java.lang.AssertionError: expected:<200> but was:<500>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.04 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.035 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<400>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -240,7 +242,7 @@ java.lang.AssertionError: expected:<200> but was:<400>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postManyUsersAndMessagesThenGetAllMessages  Time elapsed: 1.057 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postManyUsersAndMessagesThenGetAllMessages  Time elapsed: 1.053 s  <<< FAILURE!
 java.lang.AssertionError
 	at org.junit.Assert.fail(Assert.java:87)
 	at org.junit.Assert.assertTrue(Assert.java:42)
@@ -288,7 +290,7 @@ java.lang.AssertionError
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postManyAccountsAndMessagesThenGetMessagesByAccountIdTest  Time elapsed: 1.053 s  <<< ERROR!
+[ERROR] MessagingIntegrationTest.postManyAccountsAndMessagesThenGetMessagesByAccountIdTest  Time elapsed: 1.052 s  <<< ERROR!
 com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: 
 Unrecognized field "account_id" (class Model.Message), not marked as ignorable (4 known properties: "message_id", "message_text", "posted_by", "time_posted_epoch"])
  at [Source: (String)"[{"account_id":1,"username":"user","password":"password"},{"account_id":2,"username":"user2","password":"password"}]"; line: 1, column: 17] (through reference chain: java.util.ArrayList[0]->Model.Message["account_id"])
@@ -398,7 +400,7 @@ java.lang.AssertionError: expected:<200> but was:<500>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.038 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.037 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<400>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -448,7 +450,7 @@ java.lang.AssertionError: expected:<200> but was:<400>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.039 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.03 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<500>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -498,7 +500,7 @@ java.lang.AssertionError: expected:<200> but was:<500>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.postAccountAndMessageAndGetAllMessagesTest  Time elapsed: 1.031 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.postAccountAndMessageAndGetAllMessagesTest  Time elapsed: 1.027 s  <<< FAILURE!
 java.lang.AssertionError
 	at org.junit.Assert.fail(Assert.java:87)
 	at org.junit.Assert.assertTrue(Assert.java:42)
@@ -550,7 +552,7 @@ java.lang.AssertionError
 [INFO] Results:
 [INFO] 
 [ERROR] Failures: 
-[ERROR]   AuthIntegrationTest.postRegisterThenPostLoginTest:182 expected:<200> but was:<401>
+[ERROR]   AuthIntegrationTest.postRegisterThenPostIncorrectLoginTest:207 expected:<401> but was:<200>
 [ERROR]   MessagingIntegrationTest.deleteMessageNonExistentMessageTest:391 expected:<200> but was:<500>
 [ERROR]   MessagingIntegrationTest.deleteMessageTest:412 expected:<200> but was:<500>
 [ERROR]   MessagingIntegrationTest.deletedMessageShouldNotExistTest:426->deleteMessageTest:412 expected:<200> but was:<500>
@@ -568,8 +570,8 @@ java.lang.AssertionError
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  34.278 s
-[INFO] Finished at: 2023-02-06T20:08:46Z
+[INFO] Total time:  35.300 s
+[INFO] Finished at: 2023-02-07T01:29:47Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M7:test (default-test) on project Challenges: There are test failures.
 [ERROR] 

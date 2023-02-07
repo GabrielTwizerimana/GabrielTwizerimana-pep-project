@@ -169,11 +169,13 @@ public class MediaDAO {
     }
     public Message GetMessageById(int id){
         Connection conn=ConnectionUtil.getConnection();
+        PreparedStatement prep;
+        ResultSet rs;
         try {
-            String sql="SELECT * FROM message WHERE message_id=?;";
-            PreparedStatement prep=conn.prepareStatement(sql);
+            String sql="SELECT posted_by,message_text,time_posted_epoch FROM message WHERE message_id=?;";
+            prep=conn.prepareStatement(sql);
             prep.setInt(1, id);
-            ResultSet rs=prep.executeQuery();
+            rs=prep.executeQuery();
             while(rs.next()){
             Message message=new Message(rs.getInt("message_id"),
             rs.getInt("posted_by"),
@@ -186,7 +188,10 @@ public class MediaDAO {
 
         }
         return null;
+      
     }
+    
+
     public Message GetMessageByMsgposted(String message_text){
         Connection conn=ConnectionUtil.getConnection();
         try {
