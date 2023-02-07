@@ -8,6 +8,7 @@ import DAO.MediaDAO;
 import Model.Account;
 import Model.Message;
 import io.javalin.http.Context;
+import net.bytebuddy.asm.Advice.Return;
 
 public class MediaService {
  MediaDAO mediadao;
@@ -20,38 +21,41 @@ public class MediaService {
  this.mediadao=mediadao;
  }
  public Account addAccount(Account account){
-    return mediadao.NewAccount(account);
+  if(mediadao.GetAccountById(account.getAccount_id())==null){
+     return mediadao.NewAccount(account);
+  }
+    return null;
  }
  public List<Account> getAllAcc(){
    return mediadao.GetAllAccounts();
  }
  public Message addMessage(Message message){
-  if(message.message_text.length()>255 || message.message_text.isBlank()){
-    return null;
-  }
-   else{
+  //if(message.message_text.length()>255 || message.message_text.isBlank()){
+    
+  // if(mediadao.GetMessageById(message.message_id)==null){
     return mediadao.NewMessage(message);
-   }
- }
+  }
+
+ 
     public List<Message> getAllMsg(){
      
       return mediadao.GetAllMessages();
     }
    
-    public List<Message> postManyAccountsAndMessagesThenGetMessagesByAccountIdService(){
-      return mediadao.postManyAccountsAndMessagesThenGetMessagesByAccountIdDAO();
+    public List<Message> postAccountAndMessageThenGetMessageService(int message_id){
+      return mediadao.postAccountAndMessageThenGetMessage(message_id);
     }
   
-    public Account loginPass(Account account,String username){
-      account=null;
-      if(account==null && !account.getPassword().equalsIgnoreCase("password")){
-        return null;
+    public Account loginPass(Account account){
+      if(mediadao.GetAccountById(account.getAccount_id())==null){
+        return mediadao.login(account);
       }
-    return mediadao.login(account, username);
+        
+      return null;
       
     }
-    public Message getAllMsgById(Message message){
-      return mediadao.GetMessageById(message.getMessage_id());
+    public Message getAllMsgById(int message_id){
+      return mediadao.GetMessageById(message_id);
     }
     public Message getAllUpdatedMessage(Message message, int message_id){
       if(mediadao.GetMessageById(message_id)!=null){
@@ -70,17 +74,22 @@ public class MediaService {
       return mediadao.GetAccountById(account.getAccount_id());
     }
     
-    public Message deleleMsg(int message_id,Message message){
+    public Message deleleMsg(int message_id){
       if(mediadao.GetMessageById(message_id)!=null){
-      return mediadao.GetMessageById(message_id);
-      //return mediadao.deleteMessage(message_id, message);
+     mediadao.deleteMessage(message_id);
+     return  mediadao.GetMessageById(message_id);
       }
       return null;
     }
+
    public Message deleteNotExistingMsg (int message_id, Message message){
    if(mediadao.GetMessageById(message_id)!=null){
    return mediadao.GetMessageById(message_id);
    }
    return null;
    }
+   public List<Message> getAllMsgPosted_By(){
+    return mediadao.GetAllMessageByPosted_By();
   }
+  }
+

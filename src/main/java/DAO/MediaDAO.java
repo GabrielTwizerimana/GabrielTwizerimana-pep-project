@@ -83,7 +83,7 @@ public class MediaDAO {
             prep.executeUpdate();
             ResultSet pkResultSet1=prep.getGeneratedKeys();
             while(pkResultSet1.next()){
-                int generatedMess_id=(int) pkResultSet1.getLong(1);
+                int generatedMess_id=(int) pkResultSet1.getInt(1);
                 return new Message(generatedMess_id,message.getPosted_by(),message.getMessage_text(),
                 message.getTime_posted_epoch());
 
@@ -129,17 +129,17 @@ public class MediaDAO {
         }
         return messages;
     }
-    public List<Message> postManyAccountsAndMessagesThenGetMessagesByAccountIdDAO(){
+    public List<Message> postAccountAndMessageThenGetMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
         List<Message> messages=new ArrayList<>();
         try {
-            String sql="select * from message where posted_by=?;";
+            String sql="select * from message where message_id=?;";
             PreparedStatement prep=conn.prepareStatement(sql);
-            prep.setInt(1,message.getPosted_by() );
+            prep.setInt(1,message_id );
             prep.executeQuery();
             ResultSet rs=prep.executeQuery();
            while(rs.next()){
-           Message messagepost=new Message(rs.getInt("posted_by"),rs.getString("message_text"),
+           Message messagepost=new Message(rs.getInt("message_id"),rs.getInt("posted_by"),rs.getString("message_text"),
            rs.getLong("time_posted_epoch"));
            messages.add(messagepost);
            }
@@ -156,7 +156,9 @@ public class MediaDAO {
             prep.setInt(1, id);
             ResultSet rs=prep.executeQuery();
             while(rs.next()){
-            Account account=new Account(rs.getInt("account_id"),rs.getString("username"),rs.getString("password"));
+            Account account=new Account(rs.getInt("account_id"),
+            rs.getString("username"),
+            rs.getString("password"));
             return account;
             }
         } catch (Exception e) {
@@ -174,7 +176,9 @@ public class MediaDAO {
             ResultSet rs=prep.executeQuery();
             while(rs.next()){
             Message message=new Message(rs.getInt("message_id"),
-            rs.getInt("posted_by"),rs.getString("message_text"),rs.getLong("time_posted_epoch"));
+            rs.getInt("posted_by"),
+            rs.getString("message_text"),
+            rs.getLong("time_posted_epoch"));
             return message;
             }
         } catch (Exception e) {
@@ -201,10 +205,10 @@ public class MediaDAO {
         }
         return null;
     }
-    public Message deleteMessage(int message_id, Message message){
+    public Message deleteMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
     try {
-        String sql="DELETE * FROM message WHERE message_id=?;";
+        String sql="DELETE FROM message WHERE message_id=?;";
         PreparedStatement prep=conn.prepareStatement(sql);
         prep.setInt(1, message_id);
         prep.executeUpdate();
@@ -225,20 +229,19 @@ try {
 }
 return null;
 }
-public Account login(Account account, String username){
-   // account=null;
+public Account login(Account account){
     Connection conn=ConnectionUtil.getConnection();
 try {
-    String sql="select username,password from account WHERE username="+username+"";
+    
+    String sql="select * from account WHERE username=?;";
     PreparedStatement prep=conn.prepareStatement(sql);
-    prep.setString(1,account.getUsername() );
-    prep.setString(2,account.getPassword());
-    //prep.executeQuery();
+    prep.setString(1,account.getUsername());
+    
     ResultSet rs=prep.executeQuery();
     while(rs.next()){
-        Account accounts=new Account(rs.getInt("account_id"),rs.getString("username"),
+        account=new Account(rs.getInt("account_id"),rs.getString("username"),
        rs.getString("password"));
-        return accounts;
+        return account;
         }
        
 } catch (Exception e) {
@@ -246,4 +249,25 @@ try {
 }
 return null;
 }
+public List<Message> GetAllMessageByPosted_By(){
+    Connection conn=ConnectionUtil.getConnection();
+    List<Message> messages=new ArrayList<>();
+    try {
+        String sql="SELECT * FROM message WHERE posted_by=?;";
+        PreparedStatement prep=conn.prepareStatement(sql);
+        prep.setInt(1,message.getPosted_by());
+        ResultSet rs=prep.executeQuery();
+        while(rs.next()){
+        Message message=new Message(rs.getInt("message_id"),
+        rs.getInt("posted_by"),
+        rs.getString("message_text"),rs.getLong("time_posted_epoch"));
+        messages.add(message);
+        }
+    } catch (Exception e) {
+       System.out.println(e.getMessage());
+
+    }
+    return messages;
 }
+}
+

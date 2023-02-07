@@ -37,14 +37,16 @@ public class SocialMediaController{
         app.post("/login",this::postRegisterThenPostLogin);
         app.post("/messages",this::postMessageHandlerAdd);
         app.get("/messages",this::getAllMessageHandler);
-        app.post("/messages/1",this::postAccountAndMessageThenGetMessageHandler);
         app.delete("/messages/{message_id}",this::postDeletedMessagesHandler);
-        app.get("/accounts/messages",this::getAllAccountHandler);
+        app.post("/accounts/messages",this::getAllAccountHandler);
         app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
-        app.get("/users/1/messages",this::postManyAccountsAndMessagesThenGetMessagesByAccountIdHandler);
+       // app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
+        app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
         app.patch("/messages", this::updateMessageHandler);
         app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
-        //app.delete("/messages/{message_id}", this::messageDeleteNonExistance1);
+        app.get("/messages/{message_id}", this::GetAllMessageById);
+        app.delete("/messeges/1", this::messageDeleteNonExistance1);
+        app.get("accounts/{account_id}/messages",this::AllMessagesByPosted_by);
 
         
         
@@ -71,21 +73,27 @@ public class SocialMediaController{
     }
 
     }
-    private void postManyAccountsAndMessagesThenGetMessagesByAccountIdHandler(Context ctx) throws JsonProcessingException{
-            ctx.json(mediaservice.postManyAccountsAndMessagesThenGetMessagesByAccountIdService());
-             }
-    
-
+    private void postAccountAndMessageThenGetMessageHandle(Context context) throws JsonProcessingException{
+        ObjectMapper mapper=new ObjectMapper();
+        Message message=mapper.readValue(context.body(),Message.class);
+        Message addedMessage=mediaservice.addMessage(message);
+        if(addedMessage==null){
+            context.status(400);
+        }
+        else{
+        context.json(mapper.writeValueAsString(addedMessage));
+        }
+    }
     
     public void postRegisterThenPostLogin(Context ctx)throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Account account=mapper.readValue(ctx.body(), Account.class);
-        Account postlogins=mediaservice.loginPass(account, null);
-        if(postlogins==null){
-            ctx.status(401); 
+        Account postlogins=mediaservice.loginPass(account);
+        if(postlogins!=null) {
+            ctx.json(mapper.writeValueAsString(postlogins));         
         }else{
           
-            ctx.json(mapper.writeValueAsString(postlogins));
+            ctx.status(401);
         }
         }
         private void updateMessageHandler(Context ctx) throws JsonProcessingException {
@@ -112,11 +120,11 @@ public class SocialMediaController{
                     ctx.json(mapper.writeValueAsString(deletedMessage));
                     }
                     }
-            private void patchings(Context ctx) throws JsonProcessingException {
+            private void GetAllMessageById(Context ctx) throws JsonProcessingException {
                 ObjectMapper mapper = new ObjectMapper();
                 Message message = mapper.readValue(ctx.body(), Message.class);
                int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-                Message updatedMessage= mediaservice.patching(message, message_id);
+                Message updatedMessage= mediaservice.getAllMsgById(message_id);
                  System.out.println(updatedMessage);
                 if(updatedMessage == null || updatedMessage.posted_by==0 || updatedMessage.message_id==0){
                 ctx.status(400);
@@ -125,20 +133,18 @@ public class SocialMediaController{
                     }
                 }
         
-public void postDeletedMessagesHandler(Context ctx)throws JsonProcessingException{
+public void postDeletedMessagesHandler(Context context)throws JsonProcessingException{
     ObjectMapper mapper=new ObjectMapper();
-    Message message=mapper.readValue(ctx.body(), Message.class);
-    int message_id=Integer.parseInt(ctx.pathParam("message_id"));
-    Message DeletedMsg_id=mediaservice.deleleMsg(message_id,message);
-
-    if(DeletedMsg_id==null){
-        ctx.status(400);
+    Message message=mapper.readValue(context.body(),Message.class);
+    int message_id = Integer.parseInt(context.pathParam("message_id"));
+    Message addedMessage=mediaservice.deleleMsg(message_id);
+    if(addedMessage==null){
+        context.status(400);
     }
-   else{ 
-    ctx.json(mapper.writeValueAsString(DeletedMsg_id));
-    
-    
-    }}
+    else{
+    context.json(mapper.writeValueAsString(addedMessage));
+    }
+}
 
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
@@ -158,19 +164,7 @@ public void postDeletedMessagesHandler(Context ctx)throws JsonProcessingExceptio
         List<Message> message=mediaservice.getAllMsg();
         context.json(message);
     }
-    private void postAccountAndMessageThenGetMessageHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper=new ObjectMapper();
-        Message message=mapper.readValue(context.body(),Message.class);
-        Message addedMessage=mediaservice.addMessage(message);
-        if(addedMessage==null || addedMessage.message_text.length()>255){
-            context.status(400);
-        }
-        else{
-        context.json(mapper.writeValueAsString(addedMessage));
-        }
-    }
     
-   
     private void getAllAccountHandler(Context context) {
         List<Account> account=mediaservice.getAllAcc();
         List<Message> message=mediaservice.getAllMsg();
@@ -189,9 +183,12 @@ public void postDeletedMessagesHandler(Context ctx)throws JsonProcessingExceptio
         context.json(message);
         context.json(account);
     }
- 
+ private void AllMessagesByPosted_by(Context ctx){
+    List<Message> messageposted_by=mediaservice.getAllMsgPosted_By();
+    if (messageposted_by !=null){
+      ctx.json(mediaservice.getAllMsgPosted_By());
+    }
 }
+}  
     
-    
-    
-    
+
