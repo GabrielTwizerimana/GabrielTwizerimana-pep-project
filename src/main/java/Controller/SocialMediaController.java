@@ -33,18 +33,21 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
 
-        app.post("/register",this::postAccountHandler);
-        app.post("/login",this::postRegisterThenPostLogin);
-        app.post("/messages",this::postMessageHandlerAdd);
-        app.get("/messages",this::getAllMessageHandler);
-        app.get("/messages/1",this::getAllMessageHandler);
-        //app.delete("/messages/{message_id}",this::postDeletedMessagesHandler);
+        /*working*/ app.post("/register",this::postAccountHandler);
+        /*working*/ app.post("/login",this::postRegisterThenPostLogin);
+        /*working*/ app.post("/messages",this::postMessageHandlerAdd);
+        /*working*/ app.get("/messages",this::getAllMessageHandler);
+        /*working*/ app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
+        app.get("messages/{message_id}",this::GetAllMessagesById);
+        /*working*/ app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
+        //app.get("/messages/1",this::getAllMessageHandler);
+        //app.delete("/messages/{message_id}",this::postMessageHandlerAdd);
         //app.post("/accounts/messages",this::getAllAccountHandler);
-        //app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
+       
        // app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
         //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
         //app.patch("/messages", this::updateMessageHandler);
-        //app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
+        
         //app.get("/messages/{message_id}", this::GetAllMessageById);
         //app.delete("/messeges/1", this::messageDeleteNonExistance1);
         //app.get("accounts/{account_id}/messages",this::AllMessagesByPosted_by);
@@ -109,50 +112,13 @@ public class SocialMediaController{
             ctx.json(mapper.writeValueAsString(updatedMessage));
             }
             }
-            private void messageDeleteNonExistance1(Context ctx) throws JsonProcessingException {
-                ObjectMapper mapper = new ObjectMapper();
-                Message message = mapper.readValue(ctx.body(), Message.class);
-               int message_id= Integer.parseInt(ctx.pathParam("message_id"));
-                Message deletedMessage= mediaservice.deleteNotExistingMsg(message_id, message);
-                 System.out.println(deletedMessage);
-                if(deletedMessage == null || deletedMessage.message_text.length()>255 || deletedMessage.message_text.isEmpty()){
-                ctx.status(400);
-                 }else{
-                    ctx.json(mapper.writeValueAsString(deletedMessage));
-                    }
-                    }
-            private void GetAllMessageById(Context ctx) throws JsonProcessingException {
-                ObjectMapper mapper = new ObjectMapper();
-                Message message = mapper.readValue(ctx.body(), Message.class);
-               int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-                Message updatedMessage= mediaservice.getAllMsgById(message_id);
-                 System.out.println(updatedMessage);
-                if(updatedMessage == null || updatedMessage.posted_by==0 || updatedMessage.message_id==0){
-                ctx.status(400);
-                 }else{
-                    ctx.json(mapper.writeValueAsString(updatedMessage));
-                    }
-                }
-        
-public void postDeletedMessagesHandler(Context context)throws JsonProcessingException{
-    ObjectMapper mapper=new ObjectMapper();
-    Message message=mapper.readValue(context.body(),Message.class);
-    int message_id = Integer.parseInt(context.pathParam("message_id"));
-    Message addedMessage=mediaservice.deleleMsg(message_id);
-    if(addedMessage==null){
-        context.status(400);
-    }
-    else{
-    context.json(mapper.writeValueAsString(addedMessage));
-    }
-}
-
+           
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
         Message message=mapper.readValue(context.body(),Message.class);
         Message addedMessage=mediaservice.addMessage(message);
         if(addedMessage.posted_by==0 ||addedMessage.message_text.length()>255
-         || addedMessage.message_text.isBlank() || addedMessage.message_id==0 ){
+         || addedMessage.message_text.isBlank() || addedMessage.message_id==0){
             context.status(400);
          }
          
@@ -185,11 +151,10 @@ public void postDeletedMessagesHandler(Context context)throws JsonProcessingExce
         context.json(message);
         context.json(account);
     }
- private void AllMessagesByPosted_by(Context ctx){
-    List<Message> messageposted_by=mediaservice.getAllMsgPosted_By();
-    if (messageposted_by !=null){
-      ctx.json(mediaservice.getAllMsgPosted_By());
-    }
+ private void GetAllMessagesById(Context ctx){
+    
+ ctx.json(mediaservice.GetMessagesByID());
+    
 }
 }  
     
