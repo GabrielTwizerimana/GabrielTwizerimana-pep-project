@@ -33,24 +33,19 @@ public class SocialMediaController{
     public Javalin startAPI() {
         Javalin app = Javalin.create();
 
-        /*working*/ app.post("/register",this::postAccountHandler);
-        /*working*/ app.post("/login",this::postRegisterThenPostLogin);
-        /*working*/ app.post("/messages",this::postMessageHandlerAdd);
-        /*working*/ app.get("/messages",this::getAllMessageHandler);
-        /*working*/ app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
-        app.get("messages/{message_id}",this::GetAllMessagesById);
-        /*working*/ app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
-        //app.get("/messages/1",this::getAllMessageHandler);
+        /*working*/  app.post("/register",this::postAccountHandler);
+        /*working*/  app.post("/login",this::postRegisterThenPostLogin);
+        /*working*/  app.post("/messages",this::postMessageHandlerAdd);
+        /*working*/  app.get("/messages",this::getAllMessageHandler);
+        /*working*/  app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
+         /*working*/ app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
+         /*working*/ app.get("messages/{message_id}",this::GetAllMessagesById);
         //app.delete("/messages/{message_id}",this::postMessageHandlerAdd);
         //app.post("/accounts/messages",this::getAllAccountHandler);
-       
-       // app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
+        //app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
         //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
         //app.patch("/messages", this::updateMessageHandler);
         
-        //app.get("/messages/{message_id}", this::GetAllMessageById);
-        //app.delete("/messeges/1", this::messageDeleteNonExistance1);
-        //app.get("accounts/{account_id}/messages",this::AllMessagesByPosted_by);
 
         
         
@@ -100,7 +95,7 @@ public class SocialMediaController{
             ctx.status(401);
         }
         }
-        private void updateMessageHandler(Context ctx) throws JsonProcessingException {
+        /*private void updateMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
@@ -111,7 +106,7 @@ public class SocialMediaController{
          }else{
             ctx.json(mapper.writeValueAsString(updatedMessage));
             }
-            }
+            }*/
            
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
@@ -151,11 +146,20 @@ public class SocialMediaController{
         context.json(message);
         context.json(account);
     }
- private void GetAllMessagesById(Context ctx){
-    
- ctx.json(mediaservice.GetMessagesByID());
+ /**
+ * @param ctx
+ */
+private void GetAllMessagesById(Context ctx) throws JsonProcessingException{
+    //Object mapper=new ObjectMapper();
+    //Message message= ((ObjectMapper) mapper).readValue(ctx.body(),Message.class);
+    int message_id=Integer.parseInt(ctx.pathParam("message_id"));
+    Message retreivedmessage=mediaservice.GetMessagesByID(message_id);
+    if(retreivedmessage!=null){
+    ctx.json(retreivedmessage);
+      }
+}
     
 }
-}  
+
     
 

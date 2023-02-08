@@ -54,9 +54,14 @@ public class MediaService {
       return null;
       
     }
-    public List<Message> GetMessagesByID(){
-      return mediadao.GetMessageById();
-    }
+    public Message GetMessagesByID(int id){
+  
+      if(mediadao.GetMessageById(id)!=null){
+        return mediadao.GetMessageById(id);
+      }
+      return null;
+      }
+     
     
    /* public Message getAllUpdatedMessage(Message message, int message_id){
       if(mediadao.GetMessageById(message_id)!=null){
@@ -84,12 +89,7 @@ public class MediaService {
      return null;
     }*/
 
-  /*  public Message deleteNotExistingMsg (int message_id, Message message){
-   if(mediadao.GetMessageById(message_id)!=null){
-   return mediadao.GetMessageById(message_id);
-   }
-   return null;
-   }*/
+
    public List<Message> getAllMsgPosted_By(){
     return mediadao.GetAllMessageByPosted_By();
   }
