@@ -57,20 +57,20 @@ public class MediaDAO {
         }
         return message;
     }
-    public Message patchingMessage(Message message, int id){
+    public void patchingMessage(int id){
         Connection conn=ConnectionUtil.getConnection();
         try {
-            String sql="update message set message_text=? where message_id=?;";
+            String sql="update message set posted_by=?,message_text=?,time_posted_epoch=? where message_id=?;";
             PreparedStatement prep=conn.prepareStatement(sql);
-           // prep.setInt(1,message.posted_by);
-            prep.setString(1,message.message_text);
-            //prep.setLong(2,message.time_posted_epoch);
-            prep.setInt(2,id);
+           prep.setInt(1,message.getPosted_by());
+            prep.setString(2,message.getMessage_text());
+            prep.setLong(3,message.getTime_posted_epoch());
+            prep.setInt(4,id);
             prep.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return message;
+        
     }
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
@@ -222,24 +222,24 @@ public class MediaDAO {
         }
         return null;
     }
-    public Message deleteMessage(Message message){
+    public Message deleteMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
     try {
-        String sql="DELETE * FROM message WHERE message_id=?;";
+        String sql="delete * from message where message_id=?;";
         PreparedStatement prep=conn.prepareStatement(sql);
-        prep.setInt(1, message.getMessage_id());
+        prep.setInt(1, message_id);
         prep.executeUpdate();
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
     return null;
 }
-public Message deleteMessageNonExistentMessage(int message_id, Message message){
+public Message deleteExistentMessage(){
     Connection conn=ConnectionUtil.getConnection();
 try {
-    String sql="DELETE message_text=? FROM message WHERE message_id=?;";
+    String sql="DELETE * FROM message;";
     PreparedStatement prep=conn.prepareStatement(sql);
-    prep.setInt(1, message_id);
+    prep.setInt(1, message.getMessage_id());
     prep.executeUpdate();
 } catch (Exception e) {
     System.out.println(e.getMessage());

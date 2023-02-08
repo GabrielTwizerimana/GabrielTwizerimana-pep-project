@@ -40,7 +40,9 @@ public class SocialMediaController{
         /*working*/  app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
          /*working*/ app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
          /*working*/ app.get("messages/{message_id}",this::GetAllMessagesById);
-        //app.delete("/messages/{message_id}",this::postMessageHandlerAdd);
+        /*working*/  app.delete("/messages/{message_id}",this::deleteMessage);
+        //app.patch("messages/{message_id}", this::updateMessageHandler);
+        //app.delete("/messages/1",this::deletingExistingMessage);
         //app.post("/accounts/messages",this::getAllAccountHandler);
         //app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
         //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
@@ -95,18 +97,17 @@ public class SocialMediaController{
             ctx.status(401);
         }
         }
-        /*private void updateMessageHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
+        private void updateMessageHandler(Context ctx) throws JsonProcessingException {
+
        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message updatedMessage= mediaservice.patchings(message, message_id);
-         System.out.println(updatedMessage);
-        if(updatedMessage == null || updatedMessage.message_text.length()>255 || updatedMessage.message_text.isBlank()){
-        ctx.status(400);
+        Message updatedMessage= mediaservice.patchings( message_id);
+        if(updatedMessage != null ){
+            ctx.json(updatedMessage);
          }else{
-            ctx.json(mapper.writeValueAsString(updatedMessage));
+            ctx.status(400);
+            
             }
-            }*/
+            }
            
     private void postMessageHandlerAdd(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
@@ -158,8 +159,29 @@ private void GetAllMessagesById(Context ctx) throws JsonProcessingException{
     ctx.json(retreivedmessage);
       }
 }
-    
+private void deleteMessage(Context ctx) throws JsonProcessingException{
+    //Object mapper=new ObjectMapper();
+    //Message message= ((ObjectMapper) mapper).readValue(ctx.body(),Message.class);
+    int message_id=Integer.parseInt(ctx.pathParam("message_id"));
+    Message deletedmessage=mediaservice.deleleMsg(message_id);
+    if(deletedmessage!=null){
+        ctx.json(deletedmessage);
+      }
 }
+private void deletingExistingMessage(Context context) throws JsonProcessingException{
+    ObjectMapper mapper=new ObjectMapper();
+    Message message=mapper.readValue(context.body(),Message.class);
+    Message addedMessage=mediaservice.deletingExistingMessage(message);
+    if(addedMessage!=null){
+        
+        context.json(mapper.writeValueAsString(addedMessage));
+     }
+     
+    else{
+        context.status(400);
+    }
+    
+}}
 
     
 

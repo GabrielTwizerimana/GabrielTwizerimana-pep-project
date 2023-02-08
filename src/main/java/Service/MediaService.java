@@ -71,24 +71,27 @@ public class MediaService {
        return null;
     }*/
 
-    /*public Message patchings (Message message, int message_id){
+    public Message patchings (int message_id){
      if( mediadao.GetMessageById(message_id)!=null){
         return mediadao.GetMessageById(message_id);
      }
      return null;
-    }*/
+    }
     public Account getAllAccById(Account account){
       return mediadao.GetAccountById(account.getAccount_id());
     }
     
-    /*public Message deleleMsg(Message message){
-      if(mediadao.GetMessageById(message.getMessage_id())!=null){
-        return  mediadao.deleteMessage(message);
+    public Message deleleMsg(int message_id){
+      if(mediadao.GetMessageById(message_id)!=null){
+        return  mediadao.GetMessageById(message_id);
       
       }
      return null;
-    }*/
-
+    }
+   public Message deletingExistingMessage(Message message){
+    return mediadao.deleteExistentMessage();
+  
+   }
 
    public List<Message> getAllMsgPosted_By(){
     return mediadao.GetAllMessageByPosted_By();
