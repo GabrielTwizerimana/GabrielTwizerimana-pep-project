@@ -32,14 +32,14 @@ public class SocialMediaController{
         /*working*/  app.post("/login",this::postRegisterThenPostLogin);
         /*working*/  app.post("/messages",this::postMessageHandlerAdd);
         /*working*/  app.get("/messages",this::getAllMessageHandler);
-        /*working*/  app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
-         /*working*/ app.get("/accounts/1/messages",this::getMessagesByAccountIdEmpty);
+       // /*working*/  app.patch("/messages/{message_id}", this::postMessageHandlerAdd);
+         /*working*/ app.get("/accounts/{account_id}/messages",this::getMessagesByAccountIdEmpty);
          /*working*/ app.get("messages/{message_id}",this::GetAllMessagesById);
         /*working*/  app.delete("/messages/{message_id}",this::deleteMessage);
-        //app.patch("messages/{message_id}", this::updateMessageHandler);
+        app.patch("/messages/{message_id}", this::updateMessageHandler);
         //app.delete("/messages/1",this::deletingExistingMessage);
         //app.post("/accounts/messages",this::getAllAccountHandler);
-        app.get("/accounts/{account_id}/messages",this::GetAllMessagesByUserHandler);
+        //app.get("/accounts/{account_id}/messages",this::GetAllMessagesByUserHandler);
         //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
         //app.patch("/messages", this::updateMessageHandler);
         
@@ -90,8 +90,10 @@ public class SocialMediaController{
         }
         }
         private void updateMessageHandler(Context ctx) throws JsonProcessingException {
+            ObjectMapper mapper=new ObjectMapper();
+        Message message=mapper.readValue(ctx.body(),Message.class);
        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message updatedMessage= mediaservice.patchings( message_id);
+        Message updatedMessage= mediaservice.patchings( message_id,message);
         if(updatedMessage != null ){
             ctx.json(updatedMessage);
          }else{
@@ -132,11 +134,12 @@ public class SocialMediaController{
         
     }
     private void getMessagesByAccountIdEmpty(Context context) {
-        List<Message> message=mediaservice.getAllMsg();
-        List<Account> account=mediaservice.getAllAcc();
-        if(account==null || message==null)
+        String id=context.pathParam("account_id");
+        int accid=Integer.parseInt(id);
+        List<Message> message=mediaservice.getAllMsgPosted_By(accid);
+        if( message==null)
         context.json(message);
-        context.json(account);
+        
     }
  /**
  * @param ctx

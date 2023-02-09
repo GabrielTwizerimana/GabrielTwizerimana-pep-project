@@ -9,9 +9,7 @@
 [INFO] Copying 1 resource
 [INFO] 
 [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ Challenges ---
-[INFO] Changes detected - recompiling the module!
-[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[INFO] Compiling 7 source files to /workspace/GabrielTwizerimana-pep-project/target/classes
+[INFO] Nothing to compile - all classes are up to date
 [INFO] 
 [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ Challenges ---
 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
@@ -29,8 +27,8 @@
 [INFO] Running AuthIntegrationTest
 Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_E ON PUBLIC.ACCOUNT(USERNAME NULLS FIRST) VALUES ( /* 1 */ 'user' )"; SQL statement:
 INSERT INTO account (username,password) VALUES (?,?) [23505-214]
-[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 8.412 s <<< FAILURE! - in AuthIntegrationTest
-[ERROR] AuthIntegrationTest.postRegisterThenPostIncorrectLoginTest  Time elapsed: 2.218 s  <<< FAILURE!
+[ERROR] Tests run: 7, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 9.079 s <<< FAILURE! - in AuthIntegrationTest
+[ERROR] AuthIntegrationTest.postRegisterThenPostIncorrectLoginTest  Time elapsed: 2.891 s  <<< FAILURE!
 java.lang.AssertionError: expected:<401> but was:<200>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -94,8 +92,8 @@ Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREI
 INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
 Referential integrity constraint violation: "CONSTRAINT_63: PUBLIC.MESSAGE FOREIGN KEY(POSTED_BY) REFERENCES PUBLIC.ACCOUNT(ACCOUNT_ID) (0)"; SQL statement:
 INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?) [23506-214]
-[ERROR] Tests run: 20, Failures: 3, Errors: 1, Skipped: 0, Time elapsed: 20.605 s <<< FAILURE! - in MessagingIntegrationTest
-[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.034 s  <<< FAILURE!
+[ERROR] Tests run: 20, Failures: 3, Errors: 1, Skipped: 0, Time elapsed: 20.63 s <<< FAILURE! - in MessagingIntegrationTest
+[ERROR] MessagingIntegrationTest.patchMessageTest  Time elapsed: 1.039 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<400>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -205,7 +203,7 @@ Unrecognized field "account_id" (class Model.Message), not marked as ignorable (
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.035 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.getMessageAfterPatchTest  Time elapsed: 1.038 s  <<< FAILURE!
 java.lang.AssertionError: expected:<200> but was:<400>
 	at org.junit.Assert.fail(Assert.java:89)
 	at org.junit.Assert.failNotEquals(Assert.java:835)
@@ -255,7 +253,7 @@ java.lang.AssertionError: expected:<200> but was:<400>
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 
-[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.036 s  <<< FAILURE!
+[ERROR] MessagingIntegrationTest.deletedMessageShouldNotExistTest  Time elapsed: 1.042 s  <<< FAILURE!
 java.lang.AssertionError
 	at org.junit.Assert.fail(Assert.java:87)
 	at org.junit.Assert.assertTrue(Assert.java:42)
@@ -320,8 +318,8 @@ java.lang.AssertionError
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  34.106 s
-[INFO] Finished at: 2023-02-09T04:55:06Z
+[INFO] Total time:  37.208 s
+[INFO] Finished at: 2023-02-09T04:58:31Z
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M7:test (default-test) on project Challenges: There are test failures.
 [ERROR] 

@@ -54,20 +54,19 @@ public class MediaDAO {
         }
         return message;
     }
-    public void patchingMessage(int id){
+    public Message patchingMessage(int id,Message message){
         Connection conn=ConnectionUtil.getConnection();
         try {
-            String sql="update message set posted_by=?,message_text=?,time_posted_epoch=? where message_id=?;";
+            String sql="update message set message_text=? where message_id=?;";
             PreparedStatement prep=conn.prepareStatement(sql);
-           prep.setInt(1,message.getPosted_by());
-            prep.setString(2,message.getMessage_text());
-            prep.setLong(3,message.getTime_posted_epoch());
-            prep.setInt(4,id);
+           prep.setString(1,message.getMessage_text());
+            prep.setInt(2,id);
             prep.executeUpdate();
+            return GetMessageById(id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+        return null;
     }
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
@@ -113,6 +112,30 @@ public class MediaDAO {
         try {
             String sql="SELECT * FROM message;";
             PreparedStatement prep=conn.prepareStatement(sql);
+            prep.executeQuery();
+            ResultSet rs=prep.executeQuery();
+            List<Message> messages=new ArrayList<>();
+           while(rs.next()){
+        
+           Message message=new Message(rs.getInt("message_id"),
+           rs.getInt("posted_by"),
+           rs.getString("message_text"),
+           rs.getLong("time_posted_epoch"));
+           messages.add(message);
+           }
+           return messages;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+       return null;
+    }
+    public List<Message> GetAllMessagesByAccountID(int id){
+        Connection conn=ConnectionUtil.getConnection();
+       
+        try {
+            String sql="SELECT * FROM message where posted_by=?;";
+            PreparedStatement prep=conn.prepareStatement(sql);
+            prep.setInt(1, id);
             prep.executeQuery();
             ResultSet rs=prep.executeQuery();
             List<Message> messages=new ArrayList<>();
@@ -242,10 +265,10 @@ public Account login(Account account){
     Connection conn=ConnectionUtil.getConnection();
 try {
     
-    String sql="select * from account WHERE username=?;";
+    String sql="select * from account WHERE username=? and password=?;";
     PreparedStatement prep=conn.prepareStatement(sql);
     prep.setString(1,account.getUsername());
-    
+    prep.setString(2,account.getPassword());
     ResultSet rs=prep.executeQuery();
     
     while(rs.next()){
@@ -259,6 +282,8 @@ try {
 }
 return null;
 }
+
+
 public List<Message> GetAllMessageByPosted_By(){
     Connection conn=ConnectionUtil.getConnection();
     List<Message> messages=new ArrayList<>();
