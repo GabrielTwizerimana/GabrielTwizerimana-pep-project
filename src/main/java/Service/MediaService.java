@@ -1,7 +1,5 @@
 package Service;
-
 import java.util.List;
-
 import org.junit.runners.Parameterized.Parameter;
 //import io.javalin.http.Handler;
 import DAO.MediaDAO;
@@ -9,10 +7,8 @@ import Model.Account;
 import Model.Message;
 import io.javalin.http.Context;
 import net.bytebuddy.asm.Advice.Return;
-
 public class MediaService {
  MediaDAO mediadao;
-
  public MediaService(){
     this.mediadao=new MediaDAO();
  }
@@ -35,7 +31,6 @@ public class MediaService {
   // if(mediadao.GetMessageById(message.message_id)==null){
     return mediadao.NewMessage(message);
   }
-
  
     public List<Message> getAllMsg(){
      
@@ -61,6 +56,12 @@ public class MediaService {
       }
       return null;
       }
+
+      public List<Message> GetMessagesByUSER(){
+  
+          return mediadao.GetAllMessageByPosted_By();
+        
+        }
      
     
    /* public Message getAllUpdatedMessage(Message message, int message_id){
@@ -70,7 +71,6 @@ public class MediaService {
        
        return null;
     }*/
-
     public Message patchings (int message_id){
      if( mediadao.GetMessageById(message_id)!=null){
         return mediadao.GetMessageById(message_id);
@@ -82,17 +82,16 @@ public class MediaService {
     }
     
     public Message deleleMsg(int message_id){
-      if(mediadao.GetMessageById(message_id)!=null){
-        return  mediadao.GetMessageById(message_id);
-      
+      if(mediadao.GetMessageById(message_id)==null){
+       return null;
       }
-     return null;
+      return  mediadao.GetMessageById(message_id);
     }
+
    public Message deletingExistingMessage(Message message){
     return mediadao.deleteExistentMessage();
   
    }
-
    public List<Message> getAllMsgPosted_By(){
     return mediadao.GetAllMessageByPosted_By();
   }

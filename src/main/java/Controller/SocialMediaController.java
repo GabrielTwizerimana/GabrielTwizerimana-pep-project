@@ -1,11 +1,8 @@
 package Controller;
-
 import java.security.Provider.Service;
 import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import DAO.MediaDAO;
 import Model.Account;
 import Model.Message;
@@ -14,7 +11,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.security.Provider.Service;
 import io.javalin.http.Handler;
-
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
  * found in readme.md as well as the test cases. You should
@@ -32,7 +28,6 @@ public class SocialMediaController{
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-
         /*working*/  app.post("/register",this::postAccountHandler);
         /*working*/  app.post("/login",this::postRegisterThenPostLogin);
         /*working*/  app.post("/messages",this::postMessageHandlerAdd);
@@ -44,17 +39,15 @@ public class SocialMediaController{
         //app.patch("messages/{message_id}", this::updateMessageHandler);
         //app.delete("/messages/1",this::deletingExistingMessage);
         //app.post("/accounts/messages",this::getAllAccountHandler);
-        //app.get("/accounts/{account_id}/messages",this::postAccountAndMessageThenGetMessageHandle);
+        app.get("/accounts/{account_id}/messages",this::GetAllMessagesByUserHandler);
         //app.get("/messages/1",this::postAccountAndMessageThenGetMessageHandle);
         //app.patch("/messages", this::updateMessageHandler);
         
-
         
         
         return app;
     }
    
-
     /**
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
@@ -72,7 +65,6 @@ public class SocialMediaController{
             
         context.json(mapper.writeValueAsString(addedAccount));
     }
-
     }
     private void postAccountAndMessageThenGetMessageHandle(Context context) throws JsonProcessingException{
         ObjectMapper mapper=new ObjectMapper();
@@ -98,7 +90,6 @@ public class SocialMediaController{
         }
         }
         private void updateMessageHandler(Context ctx) throws JsonProcessingException {
-
        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message updatedMessage= mediaservice.patchings( message_id);
         if(updatedMessage != null ){
@@ -159,6 +150,22 @@ private void GetAllMessagesById(Context ctx) throws JsonProcessingException{
     ctx.json(retreivedmessage);
       }
 }
+
+/*private void GetAllMessagesByUserHandler(Context ctx) throws JsonProcessingException{
+    //Object mapper=new ObjectMapper();
+    //Message message= ((ObjectMapper) mapper).readValue(ctx.body(),Message.class);
+    int posted_by=Integer.parseInt(ctx.pathParam("posted_by"));
+    Message messageuser=mediaservice.GetMessagesByUSER(posted_by);
+    if(messageuser!=null){
+    ctx.json(messageuser);
+      }
+}*/
+private void GetAllMessagesByUserHandler(Context ctx){
+    List<Message> messages=mediaservice.getAllMsgPosted_By();
+    ctx.json(messages);
+}
+
+
 private void deleteMessage(Context ctx) throws JsonProcessingException{
     //Object mapper=new ObjectMapper();
     //Message message= ((ObjectMapper) mapper).readValue(ctx.body(),Message.class);
@@ -182,6 +189,5 @@ private void deletingExistingMessage(Context context) throws JsonProcessingExcep
     }
     
 }}
-
     
 

@@ -1,17 +1,14 @@
 package DAO;
-
 import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import Model.Account;
 import Model.Message;
 import Util.ConnectionUtil;
 import javafx.scene.media.Media;
-
 public class MediaDAO {
     Account account;
     Message message;
@@ -86,7 +83,6 @@ public class MediaDAO {
                 int generatedMess_id=(int) pkResultSet1.getInt(1);
                 return new Message(generatedMess_id,message.getPosted_by(),message.getMessage_text(),
                 message.getTime_posted_epoch());
-
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -172,7 +168,6 @@ public class MediaDAO {
             }
         } catch (Exception e) {
            System.out.println(e.getMessage());
-
         }
         return null;
     }
@@ -197,13 +192,11 @@ public class MediaDAO {
             }
         } catch (Exception e) {
            System.out.println(e.getMessage());
-
         }
         return messages;
       
     }*/
     
-
     public Message GetMessageByMsgposted(String message_text){
         Connection conn=ConnectionUtil.getConnection();
         try {
@@ -218,7 +211,6 @@ public class MediaDAO {
             }
         } catch (Exception e) {
            System.out.println(e.getMessage());
-
         }
         return null;
     }
@@ -255,6 +247,7 @@ try {
     prep.setString(1,account.getUsername());
     
     ResultSet rs=prep.executeQuery();
+    
     while(rs.next()){
         account=new Account(rs.getInt("account_id"),rs.getString("username"),
        rs.getString("password"));
@@ -282,9 +275,30 @@ public List<Message> GetAllMessageByPosted_By(){
         }
     } catch (Exception e) {
        System.out.println(e.getMessage());
-
     }
     return messages;
+}
+public Message GetMessageByUser(int id){
+    Connection conn=ConnectionUtil.getConnection();
+    
+    try {
+        String sql="SELECT account.account_id FROM account INNER JOIN message ON account_id=posted_by;";
+        PreparedStatement prep=conn.prepareStatement(sql);
+        prep.setInt(1,id);
+        prep.executeQuery();
+        ResultSet rs=prep.executeQuery();
+       while(rs.next()){
+       Message hello=new Message(rs.getInt("message_id"),
+       rs.getInt("posted_by"),
+       rs.getString("message_text"),
+       rs.getLong("time_posted_epoch"));
+       return hello;
+       }
+       
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+    return null;
 }
 }
 

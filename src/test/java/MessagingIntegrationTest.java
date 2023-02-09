@@ -344,7 +344,7 @@ public class MessagingIntegrationTest {
      * @throws InterruptedException
      */
     @Test
-    public void postManyAccountsAndMessagesThenGetMessagesByAccountIdTest() throws IOException, InterruptedException {
+            public void postManyAccountsAndMessagesThenGetMessagesByAccountIdTest() throws IOException, InterruptedException {
 //        reuse the code to post multiple users and messages - this test must pass first!
         postManyAccountsAndMessagesTest();
         HttpRequest getMessageByAuthorRequest = HttpRequest.newBuilder()
