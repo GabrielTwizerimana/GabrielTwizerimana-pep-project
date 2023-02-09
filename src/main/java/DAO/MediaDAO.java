@@ -240,7 +240,7 @@ public class MediaDAO {
     public Message deleteMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
     try {
-        String sql="delete * from message where message_id=?;";
+        String sql="delete from message where message_id=?;";
         PreparedStatement prep=conn.prepareStatement(sql);
         prep.setInt(1, message_id);
         prep.executeUpdate();

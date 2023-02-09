@@ -82,11 +82,15 @@ public class MediaService {
     }
     
     public Message deleleMsg(int message_id){
-      if(mediadao.GetMessageById(message_id)==null){
+     /*  if(mediadao.GetMessageById(message_id)==null){
        return null;
-      }
+      }*/
+      
       Message message=mediadao.GetMessageById(message_id);
       mediadao.deleteMessage(message_id);
+      if(message==null){
+        return null;
+       }
       return  message;
     }
 
