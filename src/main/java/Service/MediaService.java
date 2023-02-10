@@ -22,14 +22,11 @@ public class MediaService {
   }
     return null;
  }
- public List<Account> getAllAcc(){
-   return mediadao.GetAllAccounts();
- }
+ 
  public Message addMessage(Message message){
-  //if(message.message_text.length()>255 || message.message_text.isBlank()){
-    
-  // if(mediadao.GetMessageById(message.message_id)==null){
+
     return mediadao.NewMessage(message);
+
   }
  
     public List<Message> getAllMsg(){
@@ -37,9 +34,6 @@ public class MediaService {
       return mediadao.GetAllMessages();
     }
    
-   /* public List<Message> postAccountAndMessageThenGetMessageService(int message_id){
-      return mediadao.postAccountAndMessageThenGetMessage(message_id);
-    }*/
   
     public Account loginPass(Account account){
       if(mediadao.GetAccountById(account.getAccount_id())==null){
@@ -57,34 +51,16 @@ public class MediaService {
       return null;
       }
 
-      public List<Message> GetMessagesByUSER(){
-  
-          return mediadao.GetAllMessageByPosted_By();
-        
-        }
-     
-    
-   /* public Message getAllUpdatedMessage(Message message, int message_id){
-      if(mediadao.GetMessageById(message_id)!=null){
-        return mediadao.GetMessageById(message_id);
-      }
-       
-       return null;
-    }*/
+      
     public Message patchings (int message_id,Message message){
      if( mediadao.GetMessageById(message_id)!=null){
         return mediadao.patchingMessage(message_id,message);
      }
      return null;
     }
-    public Account getAllAccById(Account account){
-      return mediadao.GetAccountById(account.getAccount_id());
-    }
+   
     
     public Message deleleMsg(int message_id){
-     /*  if(mediadao.GetMessageById(message_id)==null){
-       return null;
-      }*/
       
       Message message=mediadao.GetMessageById(message_id);
       mediadao.deleteMessage(message_id);
@@ -94,10 +70,7 @@ public class MediaService {
       return  message;
     }
 
-   public Message deletingExistingMessage(Message message){
-    return mediadao.deleteExistentMessage();
-  
-   }
+   
    public List<Message> getAllMsgPosted_By(int id){
     return mediadao.GetAllMessagesByAccountID(id);
   }

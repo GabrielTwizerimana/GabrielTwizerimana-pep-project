@@ -33,27 +33,7 @@ public class MediaDAO {
         return account;
     }
     
-    public Message updateMessage(){
-        Connection conn=ConnectionUtil.getConnection();
-        try {
-            String sql="update message set message_text=? where message_id=?;";
-            PreparedStatement prep=conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            prep.setInt(1,message.posted_by);
-            prep.setString(2,message.message_text);
-            prep.setLong(3,message.time_posted_epoch);
-            prep.setInt(4,message.message_id);
-            prep.executeUpdate();
-            ResultSet pkResultSet=prep.getGeneratedKeys();
-            while(pkResultSet.next()){
-              
-                int generatedAcc_id=(int) pkResultSet.getInt(1);
-                return new Message(generatedAcc_id,message.getPosted_by(),message.getMessage_text(),message.getTime_posted_epoch());
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return message;
-    }
+    
     public Message patchingMessage(int id,Message message){
         Connection conn=ConnectionUtil.getConnection();
         try {
@@ -68,6 +48,8 @@ public class MediaDAO {
         }
         return null;
     }
+
+
     public Message NewMessage(Message message){
         Connection conn=ConnectionUtil.getConnection();
         try {
@@ -88,24 +70,8 @@ public class MediaDAO {
         }
         return message;
     }
-    public List<Account> GetAllAccounts(){
-        Connection conn=ConnectionUtil.getConnection();
-        List<Account> accounts=new ArrayList<>();
-        try {
-            String sql="SELECT * FROM account;";
-            PreparedStatement prep=conn.prepareStatement(sql);
-            prep.executeQuery();
-            ResultSet rs=prep.executeQuery();
-           while(rs.next()){
-           Account account=new Account(rs.getInt("account_id"),rs.getString("username"),
-           rs.getString("password"));
-           accounts.add(account);
-           }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return accounts;
-    }
+
+
     public List<Message> GetAllMessages(){
         Connection conn=ConnectionUtil.getConnection();
        
@@ -153,6 +119,8 @@ public class MediaDAO {
         }
        return null;
     }
+
+
     public Message GetMessageById(int id){
         Connection conn=ConnectionUtil.getConnection();
         
@@ -175,6 +143,8 @@ public class MediaDAO {
         }
         return null;
     }
+
+
     public Account GetAccountById(int id){
         Connection conn=ConnectionUtil.getConnection();
         
@@ -194,31 +164,7 @@ public class MediaDAO {
         }
         return null;
     }
-   /* public List<Message> GetMessageById(){
-        
-        Connection conn=ConnectionUtil.getConnection();     
-        PreparedStatement prep;
-        ResultSet rs;
-        List<Message> livres=new ArrayList<>();
-        Message me=new Message();
-        try {
-            String sql="select * from message where message_id=?;";
-            prep=conn.prepareStatement(sql);
-            prep.setInt(1, me.message_id);
-            rs=prep.executeQuery();
-            while(rs.next()){
-            Message message=new Message(rs.getInt("message_id"),
-            rs.getInt("posted_by"),
-            rs.getString("message_text"),
-            rs.getLong("time_posted_epoch"));
-            return livres.add(message);
-            }
-        } catch (Exception e) {
-           System.out.println(e.getMessage());
-        }
-        return messages;
-      
-    }*/
+
     
     public Message GetMessageByMsgposted(String message_text){
         Connection conn=ConnectionUtil.getConnection();
@@ -237,6 +183,8 @@ public class MediaDAO {
         }
         return null;
     }
+
+
     public Message deleteMessage(int message_id){
         Connection conn=ConnectionUtil.getConnection();
     try {
@@ -249,18 +197,8 @@ public class MediaDAO {
     }
     return null;
 }
-public Message deleteExistentMessage(){
-    Connection conn=ConnectionUtil.getConnection();
-try {
-    String sql="DELETE * FROM message;";
-    PreparedStatement prep=conn.prepareStatement(sql);
-    prep.setInt(1, message.getMessage_id());
-    prep.executeUpdate();
-} catch (Exception e) {
-    System.out.println(e.getMessage());
-}
-return null;
-}
+
+
 public Account login(Account account){
     Connection conn=ConnectionUtil.getConnection();
 try {
