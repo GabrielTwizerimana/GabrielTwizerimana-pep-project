@@ -241,27 +241,6 @@ public List<Message> GetAllMessageByPosted_By(){
     }
     return messages;
 }
-public Message GetMessageByUser(int id){
-    Connection conn=ConnectionUtil.getConnection();
-    
-    try {
-        String sql="SELECT account.account_id FROM account INNER JOIN message ON account_id=posted_by;";
-        PreparedStatement prep=conn.prepareStatement(sql);
-        prep.setInt(1,id);
-        prep.executeQuery();
-        ResultSet rs=prep.executeQuery();
-       while(rs.next()){
-       Message hello=new Message(rs.getInt("message_id"),
-       rs.getInt("posted_by"),
-       rs.getString("message_text"),
-       rs.getLong("time_posted_epoch"));
-       return hello;
-       }
-       
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-    }
-    return null;
-}
+
 }
 
